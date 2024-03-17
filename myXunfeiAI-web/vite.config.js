@@ -1,26 +1,24 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
-
-import AutoImport from 'unplugin-auto-import'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolve } from 'unplugin-vue-components/resolvers'
+import { resolve } from 'path/posix'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    AutoImport({
-      import: ['vue', 'vue-router'],
-      resolvers: [ElementPlusResolve()]
-    }),
-    Components({
-      resolvers: [ElementPlusResolve()]
-    })
-  ],
+  plugins: [vue(),sass],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src')
+      '@': resolve(__dirname, 'src')
+    }
+  },
+  define: {
+    'process.env': process.env
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: true
+      }
     }
   }
 })
